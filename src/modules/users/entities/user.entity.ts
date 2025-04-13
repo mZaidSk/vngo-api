@@ -26,11 +26,8 @@ export class User {
   @Column()
   password: string;
 
-  @Column({ type: 'int', nullable: true })
-  age?: number;
-
-  @Column()
-  location: string;
+  @Column({ type: 'date', nullable: true })
+  dob?: Date;
 
   @Column({
     type: 'enum',

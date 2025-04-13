@@ -3,9 +3,7 @@ import {
   IsEmail,
   IsOptional,
   IsEnum,
-  IsInt,
-  Min,
-  Max,
+  IsDateString,
   Length,
 } from 'class-validator';
 import { UserRole } from '../entities/user.entity';
@@ -23,13 +21,8 @@ export class CreateUserDto {
   password: string;
 
   @IsOptional()
-  @IsInt()
-  @Min(0)
-  @Max(150)
-  age?: number;
-
-  @IsString()
-  location: string;
+  @IsDateString()
+  dob?: string; // ISO date string like '1990-01-01'
 
   @IsEnum(UserRole)
   role: UserRole;
