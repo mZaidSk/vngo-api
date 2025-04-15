@@ -30,14 +30,17 @@ export class NgoProfileService {
   async findOne(id: string) {
     const profile = await this.repo.findOne({
       where: { ngo_id: id },
-      relations: ['user'],
+      relations: ['user', 'activities'],
     });
     if (!profile) throw new NotFoundException('NGO Profile not found');
     return profile;
   }
 
   async findByUserId(userId: string) {
-    return this.repo.findOne({ where: { user: { user_id: userId } } });
+    return this.repo.findOne({
+      where: { user: { user_id: userId } },
+      relations: ['activities'],
+    });
   }
 
   async update(id: string, dto: UpdateNgoProfileDto) {

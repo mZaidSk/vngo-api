@@ -1,3 +1,4 @@
+import { Activity } from 'src/modules/project/activity/entities/activity.entity';
 import { User } from 'src/modules/users/entities/user.entity';
 import {
   Entity,
@@ -5,6 +6,7 @@ import {
   Column,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('ngo_profiles')
@@ -78,4 +80,7 @@ export class NGOProfile {
 
   @Column({ type: 'text', array: true, nullable: true })
   gallery_urls: string[];
+
+  @OneToMany(() => Activity, (activity) => activity.ngoProfile)
+  activities: Activity[];
 }

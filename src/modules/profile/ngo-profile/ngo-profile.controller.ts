@@ -24,7 +24,6 @@ export class NgoProfileController {
     @Body() createNgoProfileDto: CreateNgoProfileDto,
     @CurrentUser() user: any,
   ) {
-    console.log('User: ', user);
     const userId = user.userId;
     return this.ngoProfileService.create(userId, createNgoProfileDto);
   }

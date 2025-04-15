@@ -12,6 +12,7 @@ import { QualificationsModule } from './modules/qualifications/qualifications.mo
 import { ProjectModule } from './modules/project/project.module';
 import { Skill } from './modules/qualifications/skills/entities/skill.entity';
 import { VolunteerSkill } from './modules/qualifications/volunteer-skill/entities/volunteer-skill.entity';
+import { Activity } from './modules/project/activity/entities/activity.entity';
 
 @Module({
   imports: [
@@ -21,7 +22,14 @@ import { VolunteerSkill } from './modules/qualifications/volunteer-skill/entitie
       port: 5432,
       password: 'root',
       username: 'postgres',
-      entities: [User, VolunteerProfile, NGOProfile, Skill, VolunteerSkill],
+      entities: [
+        User,
+        VolunteerProfile,
+        NGOProfile,
+        Skill,
+        VolunteerSkill,
+        Activity,
+      ],
       database: 'vngo_db',
       synchronize: true,
       logging: true,
