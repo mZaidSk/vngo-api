@@ -1,6 +1,7 @@
 import {
   BadRequestException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
@@ -10,6 +11,7 @@ import { RegisterDto } from './dto/register.dto';
 import * as bcrypt from 'bcrypt';
 import { NgoProfileService } from '../profile/ngo-profile/ngo-profile.service';
 import { VolunteerProfileService } from '../profile/volunteer-profile/volunteer-profile.service';
+import { MailerServiceS } from './mailer.service';
 
 @Injectable()
 export class AuthService {
@@ -18,6 +20,7 @@ export class AuthService {
     private jwtService: JwtService,
     private ngoProfileService: NgoProfileService,
     private volunteerProfileService: VolunteerProfileService,
+    private readonly mailerService: MailerServiceS,
   ) {}
 
   async validateUser(email: string, password: string) {
@@ -81,6 +84,50 @@ export class AuthService {
         profile_id: profileId,
       },
     };
+  }
+
+  async forgotPassword(email: string): Promise<any> {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      throw new NotFoundException('User with this email does not exist');
+    }
+
+    // Generate a reset token (e.g., short-lived JWT)
+    const payload = { email: user.email, sub: user.user_id };
+    const token = this.jwtService.sign(payload, {
+      expiresIn: '15m',
+    });
+
+    // TODO: Send this token via email
+    await this.mailerService.sendResetPasswordEmail(user.email, token);
+
+    // For now, return the token
+    return {
+      message: 'Reset password link has been sent to your email',
+      resetToken: token,
+    };
+  }
+
+  async resetPassword(token: string, newPassword: string) {
+    try {
+      // Decode the token
+      const payload = this.jwtService.verify(token);
+      const user = await this.usersService.findByEmail(payload.email);
+
+      if (!user) {
+        throw new NotFoundException('User not found');
+      }
+
+      // Hash the new password
+      const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+      // Update password in DB
+      await this.usersService.updatePassword(user.user_id, hashedPassword);
+
+      return { message: 'Password has been successfully reset' };
+    } catch (err) {
+      throw new Error('Invalid or expired reset token');
+    }
   }
 
   async checkUser(email: string) {

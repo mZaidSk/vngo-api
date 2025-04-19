@@ -15,9 +15,12 @@ import * as path from 'path';
 import { Application } from './modules/project/application/entities/application.entity';
 import { Certificate } from './modules/project/application/entities/certificate.entity';
 import { Comment } from './modules/project/comment/entities/comment.entity';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
+    ConfigModule.forRoot({ envFilePath: '.env', isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -40,6 +43,16 @@ import { Comment } from './modules/project/comment/entities/comment.entity';
     ServeStaticModule.forRoot({
       rootPath: path.join(__dirname, 'certificates'), // points to dist/certificates at runtime
       serveRoot: '/certificates', // exposed route: /certificates/filename.pdf
+    }),
+
+    MailerModule.forRoot({
+      transport: {
+        host: process.env.EMAIL_HOST,
+        auth: {
+          user: process.env.EMAIL_USERNAME,
+          pass: process.env.EMAIL_PASSWORD,
+        },
+      },
     }),
 
     AuthModule,

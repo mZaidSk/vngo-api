@@ -109,14 +109,22 @@ export const generateCertificate = async (
   doc
     .fontSize(12)
     .fillColor('#000')
+    .font('Helvetica')
     .text(`Date: ${new Date().toLocaleDateString()}`, 150, y + 10, {
       align: 'left',
     });
-  doc.text('Signature', doc.page.width - 300, y + 10, {
-    align: 'left',
-  });
 
-  // End
+  doc
+    .font('Helvetica-Oblique') // Change font family
+    .fontSize(12)
+    .text('Signature', doc.page.width - 300, y + 10, {
+      align: 'left',
+    })
+    .moveDown(0.5)
+    .fontSize(18) // Increased font size for the name
+    .text('Volunteer Connect', doc.page.width - 300, doc.y - 50, {
+      align: 'left',
+    }); // End
   doc.end();
 
   return new Promise((resolve, reject) => {

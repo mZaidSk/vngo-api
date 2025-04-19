@@ -48,4 +48,8 @@ export class UsersService {
       where: { email },
     });
   }
+
+  async updatePassword(userId: string, newHashedPassword: string) {
+    return this.userRepository.update(userId, { password: newHashedPassword });
+  }
 }
