@@ -53,9 +53,16 @@ export class ActivityService {
   async findOne(id: string) {
     const activity = await this.activityRepo.findOne({
       where: { id },
-      relations: ['ngoProfile'],
+      relations: ['ngoProfile', 'comments'],
     });
+
     if (!activity) throw new NotFoundException('Activity not found');
+
+    // Sort comments by createdAt in descending order
+    activity.comments = activity.comments.sort(
+      (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt),
+    );
+
     return activity;
   }
 
@@ -87,6 +94,8 @@ export class ActivityService {
 
     return activity;
   }
+
+  async findByVolunteerId(userId: string) {}
 
   async findByUserId(userId: string) {
     // Assuming the creator is an NGO user

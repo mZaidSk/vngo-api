@@ -83,6 +83,28 @@ export class AuthService {
     };
   }
 
+  async checkUser(email: string) {
+    const user = await this.usersService.findByEmail(email);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+
+    const { password, ...userWithoutPassword } = user;
+
+    let profile = null;
+
+    if (user.role === 'NGO') {
+      profile = await this.ngoProfileService.findByUserId(user.user_id);
+    } else if (user.role === 'VOLUNTEER') {
+      profile = await this.volunteerProfileService.findByUserId(user.user_id);
+    }
+
+    return {
+      ...userWithoutPassword,
+      profile,
+    };
+  }
+
   private async getProfileIdByRole(userId: string, role: string) {
     if (role === 'NGO') {
       const ngoProfile = await this.ngoProfileService.findByUserId(userId);

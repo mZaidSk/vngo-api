@@ -8,11 +8,13 @@ import { AuthModule } from './modules/auth/auth.module';
 import { VolunteerProfile } from './modules/profile/volunteer-profile/entities/volunteer-profile.entity';
 import { NGOProfile } from './modules/profile/ngo-profile/entities/ngo-profile.entity';
 import { ProfileModule } from './modules/profile/profile.module';
-import { QualificationsModule } from './modules/qualifications/qualifications.module';
 import { ProjectModule } from './modules/project/project.module';
-import { Skill } from './modules/qualifications/skills/entities/skill.entity';
-import { VolunteerSkill } from './modules/qualifications/volunteer-skill/entities/volunteer-skill.entity';
 import { Activity } from './modules/project/activity/entities/activity.entity';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import * as path from 'path';
+import { Application } from './modules/project/application/entities/application.entity';
+import { Certificate } from './modules/project/application/entities/certificate.entity';
+import { Comment } from './modules/project/comment/entities/comment.entity';
 
 @Module({
   imports: [
@@ -26,18 +28,23 @@ import { Activity } from './modules/project/activity/entities/activity.entity';
         User,
         VolunteerProfile,
         NGOProfile,
-        Skill,
-        VolunteerSkill,
         Activity,
+        Application,
+        Certificate,
+        Comment,
       ],
       database: 'vngo_db',
       synchronize: true,
       logging: true,
     }),
+    ServeStaticModule.forRoot({
+      rootPath: path.join(__dirname, 'certificates'), // points to dist/certificates at runtime
+      serveRoot: '/certificates', // exposed route: /certificates/filename.pdf
+    }),
+
     AuthModule,
     UsersModule,
     ProfileModule,
-    QualificationsModule,
     ProjectModule,
   ],
   controllers: [AppController],

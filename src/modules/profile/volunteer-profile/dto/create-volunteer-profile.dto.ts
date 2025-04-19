@@ -1,13 +1,55 @@
-import { IsUUID, IsOptional, IsJSON, IsString } from 'class-validator';
+import {
+  IsUUID,
+  IsOptional,
+  IsString,
+  IsDateString,
+  IsPhoneNumber,
+  IsJSON,
+  IsUrl,
+} from 'class-validator';
 
 export class CreateVolunteerProfileDto {
   @IsOptional()
-  availability?: any;
+  @IsString()
+  fullName?: string;
 
   @IsOptional()
-  interests?: any;
+  @IsDateString()
+  dob?: string;
 
   @IsOptional()
   @IsString()
-  past_experience?: string;
+  gender?: string;
+
+  @IsOptional()
+  @IsString()
+  email?: string;
+
+  @IsOptional()
+  @IsPhoneNumber(undefined, { message: 'Invalid phone number' })
+  phone?: string;
+
+  @IsOptional()
+  @IsString()
+  address?: string;
+
+  @IsOptional()
+  @IsString()
+  skills?: string;
+
+  @IsOptional()
+  @IsUrl()
+  twitter?: string;
+
+  @IsOptional()
+  @IsUrl()
+  linkedin?: string;
+
+  @IsOptional()
+  @IsUrl()
+  github?: string;
+
+  @IsOptional()
+  @IsUrl()
+  profile_picture_url?: string;
 }

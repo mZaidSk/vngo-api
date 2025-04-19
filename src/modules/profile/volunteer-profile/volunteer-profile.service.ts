@@ -30,14 +30,23 @@ export class VolunteerProfileService {
   async findOne(id: string) {
     const profile = await this.repo.findOne({
       where: { profile_id: id },
-      relations: ['user'],
+      relations: ['user', 'applications'],
     });
     if (!profile) throw new NotFoundException('Profile not found');
     return profile;
   }
 
   async findByUserId(userId: string) {
-    return this.repo.findOne({ where: { user: { user_id: userId } } });
+    const profile = await this.repo.findOne({
+      where: { user: { user_id: userId } },
+      relations: [
+        'user',
+        'applications',
+        'applications.activity', // 👈 this is what you need
+      ],
+    });
+
+    return profile;
   }
 
   async update(id: string, dto: UpdateVolunteerProfileDto) {

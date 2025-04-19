@@ -62,4 +62,9 @@ export class VolunteerProfileController {
   remove(@Param('id') id: string) {
     return this.volunteerProfileService.remove(id);
   }
+
+  @Get('user/:userId')
+  async getVolunteerProfileByUserId(@Param('userId') userId: string) {
+    return this.volunteerProfileService.findByUserId(userId);
+  }
 }

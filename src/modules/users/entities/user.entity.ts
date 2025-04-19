@@ -1,9 +1,12 @@
+import { NGOProfile } from 'src/modules/profile/ngo-profile/entities/ngo-profile.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 
 export enum UserRole {

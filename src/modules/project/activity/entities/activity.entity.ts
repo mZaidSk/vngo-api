@@ -7,7 +7,9 @@ import {
   UpdateDateColumn,
   ManyToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
+import { Comment } from '../../comment/entities/comment.entity';
 
 @Entity()
 export class Activity {
@@ -114,6 +116,9 @@ export class Activity {
 
   @UpdateDateColumn({ name: 'updated_at' })
   updatedAt: Date;
+
+  @OneToMany(() => Comment, (comment) => comment.activity, { cascade: true })
+  comments: Comment[];
 
   constructor(partial?: Partial<Activity>) {
     if (partial) {

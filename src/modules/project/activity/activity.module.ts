@@ -9,10 +9,11 @@ import { UsersService } from 'src/modules/users/users.service';
 import { NgoProfileService } from 'src/modules/profile/ngo-profile/ngo-profile.service';
 import { User } from 'src/modules/users/entities/user.entity';
 import { NGOProfile } from 'src/modules/profile/ngo-profile/entities/ngo-profile.entity';
+import { Comment } from '../comment/entities/comment.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Activity, User, NGOProfile]),
+    TypeOrmModule.forFeature([Activity, User, NGOProfile, Comment]),
     UsersModule,
     NgoProfileModule,
   ],

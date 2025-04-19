@@ -34,4 +34,11 @@ export class AuthController {
     // req.user is populated from JwtStrategy's validate() return
     return req.user;
   }
+
+  @Get('check-user')
+  @UseGuards(AuthGuard('jwt'))
+  checkUser(@Request() req) {
+    // req.user is populated  from JwtStrategy's validate() return
+    return this.authService.checkUser(req.user.email);
+  }
 }

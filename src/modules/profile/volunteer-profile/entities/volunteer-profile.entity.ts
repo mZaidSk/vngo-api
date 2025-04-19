@@ -1,14 +1,13 @@
-import { VolunteerSkill } from 'src/modules/qualifications/volunteer-skill/entities/volunteer-skill.entity';
-import { User } from 'src/modules/users/entities/user.entity';
-
 import {
   Entity,
   PrimaryGeneratedColumn,
   Column,
   ManyToOne,
-  OneToMany,
   JoinColumn,
+  OneToMany,
 } from 'typeorm';
+import { User } from 'src/modules/users/entities/user.entity';
+import { Application } from 'src/modules/project/application/entities/application.entity';
 
 @Entity('volunteer_profiles')
 export class VolunteerProfile {
@@ -22,15 +21,39 @@ export class VolunteerProfile {
   @JoinColumn({ name: 'user_id' })
   user: User;
 
-  @OneToMany(() => VolunteerSkill, (vs) => vs.profile, { cascade: true })
-  volunteerSkills: VolunteerSkill[];
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  fullName: string;
 
-  @Column({ type: 'jsonb', nullable: true })
-  availability: any;
+  @Column({ type: 'date', nullable: true })
+  dob: string;
 
-  @Column({ type: 'jsonb', nullable: true })
-  interests: any;
+  @Column({ type: 'varchar', length: 10, nullable: true })
+  gender: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  email: string;
+
+  @Column({ type: 'varchar', length: 20, nullable: true })
+  phone: string;
 
   @Column({ type: 'text', nullable: true })
-  past_experience: string;
+  address: string;
+
+  @Column({ type: 'text', nullable: true })
+  skills: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  twitter: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  linkedin: string;
+
+  @Column({ type: 'varchar', length: 255, nullable: true })
+  github: string;
+
+  @Column({ type: 'varchar', length: 500, nullable: true })
+  profile_picture_url: string;
+
+  @OneToMany(() => Application, (application) => application.volunteerProfile)
+  applications: Application[];
 }
